@@ -1,0 +1,6 @@
+{
+  "name": "Fizik KSSM T4 — Nota Kognitif & Semakan Aktif SPM",
+  "description": "Aplikasi pembelajaran sains kognitif tanpa kehilangan fakta untuk Fizik KSSM Tingkatan 4 (Bab 1–6) dengan pendedahan berperingkat, kata kunci SPM verbatim, gambar rajah interaktif, dan penjejakan penguasaan skala Likert.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}

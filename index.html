@@ -1,0 +1,55 @@
+<!doctype html>
+<html lang="ms">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#0f172a" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="Fizik KSSM" />
+    <link rel="apple-touch-icon" href="/apple-touch-icon.png" />
+    <link rel="icon" type="image/svg+xml" href="/icon.svg" />
+    <title>Fizik KSSM Tingkatan 4 &amp; 5 — Nota Kognitif &amp; Semakan Aktif SPM</title>
+    <meta
+      name="description"
+      content="Aplikasi pembelajaran sains kognitif tanpa kehilangan fakta untuk Fizik KSSM Tingkatan 4 (Bab 1–6) dan Tingkatan 5 (Bab 1–7) dengan pendedahan berperingkat, kata kunci SPM verbatim, gambar rajah interaktif, dan penjejakan penguasaan skala Likert."
+    />
+    <meta property="og:title" content="Fizik KSSM Tingkatan 4 &amp; 5 — Nota Kognitif &amp; Semakan Aktif SPM" />
+    <meta
+      property="og:description"
+      content="Aplikasi pembelajaran sains kognitif tanpa kehilangan fakta untuk Fizik KSSM Tingkatan 4 (Bab 1–6) dan Tingkatan 5 (Bab 1–7) dengan pendedahan berperingkat, kata kunci SPM verbatim, gambar rajah interaktif, dan penjejakan penguasaan skala Likert."
+    />
+    <meta property="og:type" content="website" />
+    <meta name="twitter:card" content="summary_large_image" />
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=DM+Sans:ital,opsz,wght@0,9..40,400..700;1,9..40,400..700&family=IBM+Plex+Mono:wght@400;500;600&family=Plus+Jakarta+Sans:wght@500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <script>
+      (function () {
+        try {
+          var saved = localStorage.getItem('fizik_kssm_t4_theme_v1');
+          var isDark =
+            saved === 'dark' ||
+            (saved !== 'light' &&
+              window.matchMedia &&
+              window.matchMedia('(prefers-color-scheme: dark)').matches);
+          if (isDark) {
+            document.documentElement.classList.add('dark');
+            document.documentElement.style.colorScheme = 'dark';
+          } else {
+            document.documentElement.classList.remove('dark');
+            document.documentElement.style.colorScheme = 'light';
+          }
+        } catch (e) {}
+      })();
+    </script>
+  </head>
+  <body class="bg-slate-50 text-slate-900 dark:bg-slate-950 dark:text-slate-100 antialiased selection:bg-sky-600/15 selection:text-slate-900 dark:selection:bg-sky-400/25 dark:selection:text-slate-50 transition-colors duration-200">
+    <div id="root"></div>
+    <script type="module" src="/src/main.tsx"></script>
+  </body>
+</html>

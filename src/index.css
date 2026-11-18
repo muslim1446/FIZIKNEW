@@ -1,0 +1,84 @@
+@import "tailwindcss";
+@import "katex/dist/katex.min.css";
+
+@custom-variant dark (&:where(.dark, .dark *));
+
+@layer base {
+  :root {
+    --font-display: 'Plus Jakarta Sans', system-ui, -apple-system, sans-serif;
+    --font-body: 'DM Sans', system-ui, -apple-system, sans-serif;
+    --font-mono: 'IBM Plex Mono', ui-monospace, SFMono-Regular, monospace;
+
+    /* Adaptive SVG physics diagram tokens (Light) */
+    --svg-bg: #FFFFFF;
+    --svg-ink: #0F172A;
+    --svg-muted: #475569;
+    --svg-axis: #334155;
+    --svg-subtle: #F8FAFC;
+    --svg-sky-tint: #E0F2FE;
+    --svg-blue-tint: #EFF6FF;
+    --svg-amber-tint: #FEF3C7;
+    --svg-red-tint: #FEE2E2;
+    --svg-sky: #0284C7;
+    --svg-sky-text: #0369A1;
+    --svg-emerald: #059669;
+    --svg-red: #DC2626;
+    --svg-amber: #D97706;
+    --svg-amber-text: #92400E;
+    --svg-red-text: #991B1B;
+    --svg-sky-deep: #075985;
+  }
+
+  .dark {
+    /* Adaptive SVG physics diagram tokens (Deep Slate Night Study) */
+    --svg-bg: #020617;
+    --svg-ink: #F1F5F9;
+    --svg-muted: #94A3B8;
+    --svg-axis: #CBD5E1;
+    --svg-subtle: #0F172A;
+    --svg-sky-tint: #082F49;
+    --svg-blue-tint: #0F172A;
+    --svg-amber-tint: #451A03;
+    --svg-red-tint: #450A0A;
+    --svg-sky: #38BDF8;
+    --svg-sky-text: #7DD3FC;
+    --svg-emerald: #34D399;
+    --svg-red: #F87171;
+    --svg-amber: #FBBF24;
+    --svg-amber-text: #FDE68A;
+    --svg-red-text: #FECACA;
+    --svg-sky-deep: #BAE6FD;
+  }
+
+  body {
+    font-family: var(--font-body);
+    background-color: #F8FAFC;
+    color: #0F172A;
+  }
+
+  .dark body {
+    background-color: #020617;
+    color: #F1F5F9;
+  }
+
+  h1, h2, h3, h4, .font-display {
+    font-family: var(--font-display);
+  }
+
+  code, pre, .font-mono, .tabular-nums {
+    font-family: var(--font-mono);
+    font-variant-numeric: tabular-nums;
+  }
+}
+
+/* KaTeX responsiveness & clean spacing inside structured blocks */
+.katex-display {
+  margin: 0.4rem 0;
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding-bottom: 0.15rem;
+}
+
+.katex {
+  font-size: 1.02em;
+}
