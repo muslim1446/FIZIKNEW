@@ -5,6 +5,7 @@ import type {
   MasteryStatus,
   PartNumber,
   StudyProgressMap,
+  SubjectId,
   SubtopicContent,
   SubtopicProgress,
 } from '../types/textbook';
@@ -16,29 +17,29 @@ export const LIKERT_LABELS: Record<
   { short: string; description: string; recommendation: string }
 > = {
   1: {
-    short: '1 · Belum Jelas',
-    description: 'Sukar difahami, konsep asas masih keliru',
-    recommendation: 'Perlu baca semula Bahagian 1–3 dengan teliti',
+    short: '1 · Belum Faham',
+    description: 'Masih keliru dengan konsep asas',
+    recommendation: 'Baca semula Bahagian 1 hingga 3',
   },
   2: {
-    short: '2 · Masih Kabur',
-    description: 'Faham sedikit tetapi keliru rumus atau kata kunci SPM',
-    recommendation: 'Perlu ulang kaji kata kunci & contoh kerja',
+    short: '2 · Kurang Jelas',
+    description: 'Faham sedikit tetapi masih keliru rumus atau kata kunci',
+    recommendation: 'Semak kata kunci dan contoh pengiraan',
   },
   3: {
     short: '3 · Faham Asas',
-    description: 'Faham konsep tetapi masih perlukan latihan pengiraan',
-    recommendation: 'Selesaikan Bahagian 6 (Masalah Pudar & KBAT)',
+    description: 'Faham konsep tetapi masih perlukan latihan',
+    recommendation: 'Cuba soalan latihan di Bahagian 6',
   },
   4: {
     short: '4 · Yakin',
-    description: 'Boleh menerangkan mekanisme dan mengira dengan tepat',
-    recommendation: 'Semak amaran perangkap SPM sebelum peperiksaan',
+    description: 'Boleh menerangkan konsep dan mengira dengan betul',
+    recommendation: 'Semak kesilapan biasa sebelum peperiksaan',
   },
   5: {
-    short: '5 · Dikuasai Penuh',
-    description: 'Hafal kata kunci verbatim & sedia jawab Kertas 1 & 2',
-    recommendation: 'Telah dikuasai — ulang kaji pantas berkala sahaja',
+    short: '5 · Sudah Kuasai',
+    description: 'Ingat kata kunci dan sedia menjawab soalan SPM',
+    recommendation: 'Sudah dikuasai. Ulang kaji ringkas secara berkala.',
   },
 };
 
@@ -62,7 +63,7 @@ export const STATUS_META: Record<
     bgColor: 'bg-slate-50 dark:bg-slate-800/75',
   },
   opened_unrated: {
-    label: 'Sedang Dibaca (Belum Dinilai)',
+    label: 'Sedang Dibaca',
     shortBadge: 'SEDANG DIBACA',
     symbol: '◐',
     textColor: 'text-sky-700 dark:text-sky-300',
@@ -78,7 +79,7 @@ export const STATUS_META: Record<
     bgColor: 'bg-red-50/70 dark:bg-red-950/50',
   },
   needs_practice: {
-    label: 'Perlu Pengukuhan',
+    label: 'Perlu Latihan',
     shortBadge: 'PERLU LATIHAN',
     symbol: '◆',
     textColor: 'text-amber-700 dark:text-amber-300',
@@ -372,6 +373,121 @@ export function computeProgressStats(
   };
 }
 
+export const PART_MASTERY_WEIGHTS: Record<PartNumber, number> = {
+  1: 0.85,
+  2: 1.5,
+  3: 1.75,
+  4: 1.4,
+  5: 1.25,
+  6: 1.85,
+};
+
+export function likertToScore(
+  rating: LikertRating | null,
+  opened: boolean
+): number {
+  if (rating === null) {
+    return opened ? 0.06 : 0;
+  }
+  switch (rating) {
+    case 1:
+      return 0.2;
+    case 2:
+      return 0.4;
+    case 3:
+      return 0.64;
+    case 4:
+      return 0.86;
+    case 5:
+      return 1.0;
+  }
+}
+
+export interface SubjectMasteryMetrics {
+  fraction: number;
+  exactPercent: number;
+  formattedPercent: string;
+  earnedWeight: number;
+  totalWeight: number;
+}
+
+/**
+ * Computes high-precision SPM mastery across ALL Form 4 + Form 5 chapters,
+ * subtopics, and Part 1-6 subsets for a SINGLE subject only.
+ * Respects Likert 1-5 ratings, opened/unrated (0.06), and explicit 0/null unread (0).
+ */
+export function computeSubjectMasteryProgress(
+  subjectChapters: ChapterContent[],
+  map: StudyProgressMap
+): SubjectMasteryMetrics {
+  let earnedWeight = 0;
+  let totalWeight = 0;
+
+  for (const chapter of subjectChapters) {
+    for (const subtopic of chapter.subtopics) {
+      const validParts: PartNumber[] = subtopic.part5DecisionTable
+        ? [1, 2, 3, 4, 5, 6]
+        : [1, 2, 3, 4, 6];
+
+      const prog = getSubtopicProgress(map, subtopic.id);
+
+      let partWeightTotal = 0;
+      let partWeightedEarned = 0;
+      let hasAnyPartActivity = false;
+
+      for (const pNum of validParts) {
+        const w = PART_MASTERY_WEIGHTS[pNum];
+        const pRating = prog.partRatings?.[pNum] ?? null;
+        const pOpened = prog.openedParts.includes(pNum) || pRating !== null;
+        if (pOpened || pRating !== null) {
+          hasAnyPartActivity = true;
+        }
+        partWeightTotal += w;
+        partWeightedEarned += w * likertToScore(pRating, pOpened);
+      }
+
+      const depthBonus =
+        Math.min(subtopic.part3Mechanics.experiments.length * 0.4, 0.8) +
+        Math.min(subtopic.part4WorkedExamples.length * 0.25, 0.5) +
+        1.5;
+
+      const subtopicWeight = partWeightTotal + depthBonus;
+      totalWeight += subtopicWeight;
+
+      const isCompletelyUnread =
+        !prog.opened && prog.rating === null && !hasAnyPartActivity;
+      if (isCompletelyUnread) {
+        continue;
+      }
+
+      const partRatio =
+        partWeightTotal > 0 ? partWeightedEarned / partWeightTotal : 0;
+      const overallScore = likertToScore(prog.rating, prog.opened);
+
+      const compositeScore = Math.max(
+        0,
+        Math.min(1, 0.68 * partRatio + 0.32 * overallScore)
+      );
+
+      earnedWeight += subtopicWeight * compositeScore;
+    }
+  }
+
+  const fraction =
+    totalWeight > 0 ? Math.max(0, Math.min(1, earnedWeight / totalWeight)) : 0;
+  const exactPercent = fraction * 100;
+  const formattedPercent =
+    exactPercent >= 99.995 ? '100%' : `${exactPercent.toFixed(2)}%`;
+
+  return {
+    fraction,
+    exactPercent,
+    formattedPercent,
+    earnedWeight,
+    totalWeight,
+  };
+}
+
 export type StatusFilter = 'all' | MasteryStatus | 'review_priority';
 
 export function filterSubtopics(
@@ -415,11 +531,11 @@ export function filterSubtopics(
 export function routeToHash(route: AppRoute): string {
   switch (route.view) {
     case 'dashboard':
-      return '#/';
+      return route.subject === 'kimia' ? '#/kimia' : '#/';
     case 'review':
-      return '#/ulang-kaji';
+      return route.subject === 'kimia' ? '#/kimia/ulang-kaji' : '#/ulang-kaji';
     case 'formulas':
-      return '#/rumus';
+      return route.subject === 'kimia' ? '#/kimia/rumus' : '#/rumus';
     case 'chapter':
       return `#/bab/${route.chapterId}`;
     case 'subtopic':
@@ -427,6 +543,21 @@ export function routeToHash(route: AppRoute): string {
     case 'part':
       return `#/bab/${route.chapterId}/${route.subtopicId}/bahagian/${route.partNum}`;
   }
+}
+
+export function resolveSubjectFromRoute(
+  route: AppRoute,
+  chapters: ChapterContent[]
+): SubjectId | null {
+  if (
+    route.view === 'dashboard' ||
+    route.view === 'review' ||
+    route.view === 'formulas'
+  ) {
+    return route.subject ?? null;
+  }
+  const ch = chapters.find((c) => c.id === route.chapterId);
+  return ch?.subject ?? (route.chapterId.startsWith('k4-') || route.chapterId.startsWith('k5-') ? 'kimia' : 'fizik');
 }
 
 export function parseHashToRoute(
@@ -437,6 +568,9 @@ export function parseHashToRoute(
   if (cleaned === '/' || cleaned === '') return { view: 'dashboard' };
   if (cleaned === '/ulang-kaji') return { view: 'review' };
   if (cleaned === '/rumus') return { view: 'formulas' };
+  if (cleaned === '/kimia') return { view: 'dashboard', subject: 'kimia' };
+  if (cleaned === '/kimia/ulang-kaji') return { view: 'review', subject: 'kimia' };
+  if (cleaned === '/kimia/rumus') return { view: 'formulas', subject: 'kimia' };
 
   const parts = cleaned.split('/').filter(Boolean);
   if (parts[0] === 'bab' && parts[1]) {

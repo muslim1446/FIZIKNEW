@@ -51,7 +51,7 @@ export const HonestExitModal: React.FC<HonestExitModalProps> = ({
             </span>
             <div>
               <p className="font-mono text-[11px] font-semibold uppercase tracking-wider text-amber-800 dark:text-amber-300">
-                Semakan Kejujuran Sebelum Keluar
+                Sebelum Keluar
               </p>
               <h2
                 id="exit-gate-title"
@@ -73,7 +73,7 @@ export const HonestExitModal: React.FC<HonestExitModalProps> = ({
         </div>
 
         <p className="text-sm text-slate-700 dark:text-slate-300 leading-relaxed">
-          Sejujurnya, sebelum anda meninggalkan halaman ini — sejauh manakah anda benar-benar membaca dan memahami kandungannya?
+          Sebelum keluar dari halaman ini, sejauh mana anda sudah membaca dan memahaminya?
         </p>
 
         {/* Honest 0 / Just Visiting Option */}
@@ -86,18 +86,18 @@ export const HonestExitModal: React.FC<HonestExitModalProps> = ({
           <EyeOff className="h-4 w-4 shrink-0 mt-0.5 text-slate-600 dark:text-slate-300" />
           <div>
             <p className="font-mono text-xs font-bold text-slate-900 dark:text-slate-100">
-              0 · Sejujurnya saya tidak membacanya betul-betul, sekadar melawat sahaja
+              0 · Saya cuma melawat, belum baca betul-betul
             </p>
             <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
-              Direkodkan sebagai <strong className="text-slate-800 dark:text-slate-200">0 / Belum Dibaca</strong> supaya statistik ulang kaji anda kekal jujur.
+              Dikira sebagai <strong className="text-slate-800 dark:text-slate-200">Belum Dibaca</strong> supaya rekod anda kekal tepat.
             </p>
           </div>
         </button>
 
-        {/* Likert 1–5 Options */}
+        {/* Rating 1-5 Options */}
         <div className="space-y-1.5">
           <p className="font-mono text-[11px] font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-            Atau nilaikan tahap kefahaman sebenar anda (Skala Likert 1–5):
+            Atau pilih tahap kefahaman anda (1 hingga 5):
           </p>
           <div className="grid gap-1.5">
             {LIKERT_OPTIONS.map((val) => {
@@ -131,7 +131,7 @@ export const HonestExitModal: React.FC<HonestExitModalProps> = ({
                   </div>
                   {isPrev && (
                     <span className="font-mono text-[10px] font-semibold text-sky-700 dark:text-sky-300 shrink-0">
-                      NILAI SEDIA ADA
+                      PILIHAN SEMASA
                     </span>
                   )}
                 </button>
@@ -146,7 +146,7 @@ export const HonestExitModal: React.FC<HonestExitModalProps> = ({
             onClick={onCancelStay}
             className="rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3.5 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-50 dark:hover:bg-slate-700 cursor-pointer"
           >
-            Batal — Kekal di Halaman Ini
+            Kekal di Halaman Ini
           </button>
         </div>
       </div>

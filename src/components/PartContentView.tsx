@@ -13,6 +13,7 @@ import type {
   SubtopicContent,
   SubtopicProgress,
 } from '../types/textbook';
+import { ChemistryDiagram } from './ChemistryDiagrams';
 import { LikertRatingBar } from './LikertRatingBar';
 import { KaTeXBlock, RichMathText } from './MathText';
 import { PhysicsDiagram } from './PhysicsDiagrams';
@@ -22,28 +23,28 @@ export const PART_METADATA: Record<
   { title: string; subtitle: string }
 > = {
   1: {
-    title: 'Jangkar Gambaran Besar',
-    subtitle: 'Realiti fizikal ("Mengapa") & kaitan keseluruhan bab',
+    title: 'Pengenalan & Gambaran Besar',
+    subtitle: 'Konsep asas dan kaitan dengan bab ini',
   },
   2: {
-    title: 'Takrifan, Hukum & Persamaan Verbatim SPM',
-    subtitle: 'Kata kunci pemarkahan wajib tanpa ubah suai ayat',
+    title: 'Takrifan & Persamaan SPM',
+    subtitle: 'Ayat dan kata kunci penting untuk markah penuh',
   },
   3: {
-    title: 'Mekanik Teras, Rumus, Jadual & Rajah Visual',
-    subtitle: 'Rantaian Punca → Mekanisme → Kesan, had rumus, rajah & eksperimen',
+    title: 'Konsep, Rumus & Rajah',
+    subtitle: 'Penerangan punca dan kesan, rumus, rajah dan eksperimen',
   },
   4: {
-    title: 'Contoh Kerja Teranotasi 4-Langkah',
-    subtitle: 'Penyelesaian berstruktur + amaran perangkap SPM',
+    title: 'Contoh Pengiraan',
+    subtitle: 'Langkah penyelesaian penuh dan kesilapan yang perlu dielakkan',
   },
   5: {
-    title: 'Jadual Keputusan & Pengubahsuaian Kertas 2 SPM',
-    subtitle: 'Pilihan reka bentuk kejuruteraan & sebab saintifik',
+    title: 'Jadual Keputusan Kertas 2',
+    subtitle: 'Pilihan reka bentuk dan sebab saintifik',
   },
   6: {
-    title: 'Titik Semakan Anti-Ilusi (Latihan Aktif)',
-    subtitle: 'Ingatan 3-saat, masalah pudar & soalan pemindahan KBAT',
+    title: 'Latihan & Uji Kendiri',
+    subtitle: 'Soalan pantas, latihan langkah dan soalan KBAT',
   },
 };
 
@@ -95,7 +96,7 @@ export const PartContentView: React.FC<PartContentViewProps> = ({
       <div className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 space-y-2">
         <div className="flex flex-wrap items-center justify-between gap-2">
           <span className="font-mono text-xs font-semibold uppercase tracking-wider text-sky-700 dark:text-sky-400">
-            Tingkatan {chapter.formLevel} · Bab {chapter.number} · Subtopik {subtopic.code} · Bahagian {partNum}/6
+            Tingkatan {chapter.formLevel} · Bab {chapter.number} · Topik {subtopic.code} · Bahagian {partNum}/6
           </span>
           <button
             type="button"
@@ -103,7 +104,7 @@ export const PartContentView: React.FC<PartContentViewProps> = ({
             className="inline-flex items-center gap-1.5 rounded-md border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3 py-1.5 text-xs font-semibold text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer"
           >
             <ArrowLeft className="h-3.5 w-3.5" />
-            <span>Kembali ke Subtopik {subtopic.code}</span>
+            <span>Kembali ke Topik {subtopic.code}</span>
           </button>
         </div>
         <h1 className="font-display text-xl sm:text-2xl font-bold text-slate-950 dark:text-slate-50">
@@ -119,7 +120,7 @@ export const PartContentView: React.FC<PartContentViewProps> = ({
         <section className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 space-y-4 text-sm leading-relaxed text-slate-800 dark:text-slate-200">
           <div>
             <p className="font-mono text-xs font-semibold uppercase tracking-wider text-sky-700 dark:text-sky-400">
-              Realiti Fizikal (Mengapa Fenomena Ini Wujud)
+              Konsep Utama
             </p>
             <p className="mt-1.5 text-base leading-relaxed text-slate-900 dark:text-slate-100">
               <RichMathText text={subtopic.part1Anchor.phenomenon} />
@@ -127,7 +128,7 @@ export const PartContentView: React.FC<PartContentViewProps> = ({
           </div>
           <div className="pt-3 border-t border-slate-100 dark:border-slate-800">
             <p className="font-mono text-xs font-semibold uppercase tracking-wider text-slate-500 dark:text-slate-400">
-              Kaitan Dengan Keseluruhan Bab {chapter.number}
+              Kaitan dengan Bab {chapter.number}
             </p>
             <p className="mt-1.5 leading-relaxed">
               <RichMathText text={subtopic.part1Anchor.chapterConnection} />
@@ -148,7 +149,7 @@ export const PartContentView: React.FC<PartContentViewProps> = ({
                   <RichMathText text={def.title} />
                 </span>
                 <span className="font-mono text-[11px] font-semibold uppercase tracking-wider text-amber-800 dark:text-amber-300">
-                  Amaran Kata Kunci SPM · {def.category}
+                  Kata Kunci SPM · {def.category}
                 </span>
               </div>
               <blockquote className="text-sm sm:text-base leading-relaxed text-slate-900 dark:text-slate-200">
@@ -193,7 +194,7 @@ export const PartContentView: React.FC<PartContentViewProps> = ({
                 </div>
                 <div className="rounded-lg border border-sky-200 dark:border-sky-800/70 bg-sky-50/40 dark:bg-sky-950/40 p-3.5">
                   <p className="font-mono text-[11px] font-semibold uppercase tracking-wider text-sky-700 dark:text-sky-300">
-                    2 · Mekanisme
+                    2 · Proses
                   </p>
                   <p className="mt-1.5 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200">
                     <RichMathText text={chain.mechanism} />
@@ -201,7 +202,7 @@ export const PartContentView: React.FC<PartContentViewProps> = ({
                 </div>
                 <div className="rounded-lg border border-emerald-200 dark:border-emerald-800/70 bg-emerald-50/40 dark:bg-emerald-950/40 p-3.5">
                   <p className="font-mono text-[11px] font-semibold uppercase tracking-wider text-emerald-700 dark:text-emerald-300">
-                    3 · Kesan Dapat Dicerap
+                    3 · Kesan
                   </p>
                   <p className="mt-1.5 text-xs sm:text-sm leading-relaxed text-slate-800 dark:text-slate-200">
                     <RichMathText text={chain.effect} />
@@ -267,7 +268,7 @@ export const PartContentView: React.FC<PartContentViewProps> = ({
                     className="flex items-baseline justify-between gap-2 rounded border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-900 px-3 py-2 text-xs text-slate-800 dark:text-slate-200"
                   >
                     <span>
-                      <RichMathText text={`$${sym.symbol}$`} /> —{' '}
+                      <RichMathText text={`$${sym.symbol}$`} /> :{' '}
                       <RichMathText text={sym.meaning} />
                     </span>
                     <span className="shrink-0 font-mono text-[11px] text-slate-600 dark:text-slate-400">
@@ -279,7 +280,7 @@ export const PartContentView: React.FC<PartContentViewProps> = ({
               <div className="grid gap-2 sm:grid-cols-2 text-xs">
                 <div className="rounded border border-emerald-200 dark:border-emerald-800/70 bg-emerald-50/50 dark:bg-emerald-950/35 p-3">
                   <span className="font-mono font-semibold text-emerald-800 dark:text-emerald-300">
-                    ✓ BILA SAH DIGUNA:{' '}
+                    ✓ BILA DIGUNA:{' '}
                   </span>
                   <span className="text-slate-800 dark:text-slate-200">
                     <RichMathText text={f.appliesWhen} />
@@ -287,7 +288,7 @@ export const PartContentView: React.FC<PartContentViewProps> = ({
                 </div>
                 <div className="rounded border border-red-200 dark:border-red-800/70 bg-red-50/50 dark:bg-red-950/35 p-3">
                   <span className="font-mono font-semibold text-red-800 dark:text-red-300">
-                    ▲ BILA GAGAL / AMARAN:{' '}
+                    ▲ HAD &amp; AMARAN:{' '}
                   </span>
                   <span className="text-slate-800 dark:text-slate-200">
                     <RichMathText text={f.failsWhen} />
@@ -311,11 +312,15 @@ export const PartContentView: React.FC<PartContentViewProps> = ({
                 </p>
               </div>
               <div className="rounded border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-950 p-2">
-                <PhysicsDiagram kind={diag.kind} />
+                {diag.kind.startsWith('chem-') ? (
+                  <ChemistryDiagram kind={diag.kind} />
+                ) : (
+                  <PhysicsDiagram kind={diag.kind} />
+                )}
               </div>
               <p className="text-xs font-medium text-sky-900 dark:text-sky-200 bg-sky-50 dark:bg-sky-950/45 border border-sky-200 dark:border-sky-800/70 rounded px-3 py-2">
                 <span className="font-mono font-semibold uppercase mr-1">
-                  Aturan Rajah:
+                  Nota Rajah:
                 </span>
                 <RichMathText text={diag.axisOrRule} />
               </p>
@@ -362,13 +367,13 @@ export const PartContentView: React.FC<PartContentViewProps> = ({
                 </div>
                 <div>
                   <dt className="inline font-semibold text-slate-950 dark:text-slate-50">
-                    Logik Susunan &amp; Langkah Kritis:{' '}
+                    Langkah Penting:{' '}
                   </dt>
                   <dd className="inline"><RichMathText text={exp.setupLogic} /></dd>
                 </div>
                 <div>
                   <dt className="inline font-semibold text-slate-950 dark:text-slate-50">
-                    Jangkaan Graf / Pemerhatian:{' '}
+                    Pemerhatian &amp; Graf:{' '}
                   </dt>
                   <dd className="inline"><RichMathText text={exp.expectedResult} /></dd>
                 </div>
@@ -401,7 +406,7 @@ export const PartContentView: React.FC<PartContentViewProps> = ({
               <div className="grid gap-2.5 md:grid-cols-2">
                 <div className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-800/70 p-3.5">
                   <p className="font-mono text-[11px] font-semibold uppercase text-slate-500 dark:text-slate-400">
-                    Langkah 1 · Diberi (Tukar Unit)
+                    Langkah 1 · Diberi
                   </p>
                   <ul className="mt-1.5 space-y-1 text-xs sm:text-sm text-slate-800 dark:text-slate-200">
                     {ex.given.map((g, gIdx) => (
@@ -414,24 +419,24 @@ export const PartContentView: React.FC<PartContentViewProps> = ({
 
                 <div className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-800/70 p-3.5">
                   <p className="font-mono text-[11px] font-semibold uppercase text-slate-500 dark:text-slate-400">
-                    Langkah 2 · Rumus &amp; Sebab Pemilihan
+                    Langkah 2 · Rumus
                   </p>
                   <KaTeXBlock latex={ex.formulaLatex} />
                   <p className="text-xs text-slate-600 dark:text-slate-300">
-                    [<RichMathText text={ex.formulaWhy} />]
+                    <RichMathText text={ex.formulaWhy} />
                   </p>
                 </div>
 
                 <div className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-800/70 p-3.5">
                   <p className="font-mono text-[11px] font-semibold uppercase text-slate-500 dark:text-slate-400">
-                    Langkah 3 · Penggantian
+                    Langkah 3 · Kiraan
                   </p>
                   <KaTeXBlock latex={ex.substituteLatex} />
                 </div>
 
                 <div className="rounded-lg border border-emerald-200 dark:border-emerald-800/70 bg-emerald-50/50 dark:bg-emerald-950/35 p-3.5">
                   <p className="font-mono text-[11px] font-semibold uppercase text-emerald-800 dark:text-emerald-300">
-                    Langkah 4 · Jawapan + Unit
+                    Langkah 4 · Jawapan
                   </p>
                   <p className="mt-1.5 text-sm sm:text-base font-semibold text-slate-950 dark:text-slate-50">
                     <RichMathText text={ex.answer} />
@@ -441,7 +446,7 @@ export const PartContentView: React.FC<PartContentViewProps> = ({
 
               <div className="rounded-lg border border-red-200 dark:border-red-800/70 bg-red-50/60 dark:bg-red-950/40 px-3.5 py-2.5 text-xs sm:text-sm text-red-900 dark:text-red-200">
                 <strong className="font-mono uppercase mr-1.5">
-                  ▲ Amaran Perangkap SPM:
+                  ▲ Elakkan Kesilapan Ini:
                 </strong>
                 <RichMathText text={ex.trapAlert} />
               </div>
@@ -456,10 +461,10 @@ export const PartContentView: React.FC<PartContentViewProps> = ({
             <thead className="bg-slate-100 dark:bg-slate-800 text-slate-800 dark:text-slate-100">
               <tr>
                 <th className="border-b border-slate-200 dark:border-slate-700 px-4 py-3 font-semibold w-2/5">
-                  Pilihan Reka Bentuk / Ciri Pengubahsuaian
+                  Pilihan Reka Bentuk
                 </th>
                 <th className="border-b border-slate-200 dark:border-slate-700 px-4 py-3 font-semibold w-3/5">
-                  Sebab Saintifik (Frasa Pemarkahan SPM)
+                  Sebab Saintifik (Jawapan SPM)
                 </th>
               </tr>
             </thead>
@@ -483,7 +488,7 @@ export const PartContentView: React.FC<PartContentViewProps> = ({
         <section className="rounded-xl border border-slate-200 dark:border-slate-800 bg-white dark:bg-slate-900 p-5 space-y-4">
           <div>
             <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-              1 · Ingatan Pantas 3-Saat (Jawab Tanpa Menoleh ke Belakang)
+              1 · Soalan Pantas (Cuba Jawab Sendiri)
             </h2>
             <ol className="mt-2 space-y-2 text-sm text-slate-800 dark:text-slate-200 list-decimal list-inside">
               {subtopic.part6Checkpoint.quickRecall.map((q, idx) => (
@@ -496,7 +501,7 @@ export const PartContentView: React.FC<PartContentViewProps> = ({
 
           <div className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-800/70 p-4 space-y-2">
             <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-              2 · Masalah Pudar (Lengkapkan Langkah 2–4 Sendiri)
+              2 · Lengkapkan Pengiraan (Langkah 2 hingga 4)
             </h2>
             <p className="text-sm font-medium text-slate-900 dark:text-slate-100">
               <RichMathText text={subtopic.part6Checkpoint.fadedProblem.prompt} />
@@ -513,7 +518,7 @@ export const PartContentView: React.FC<PartContentViewProps> = ({
 
           <div className="rounded-lg border border-slate-200 dark:border-slate-700 bg-slate-50/70 dark:bg-slate-800/70 p-4 space-y-1.5">
             <h2 className="font-mono text-xs font-semibold uppercase tracking-wider text-slate-700 dark:text-slate-300">
-              3 · Soalan Pemindahan Peperiksaan (KBAT / Penaakulan)
+              3 · Soalan KBAT
             </h2>
             <p className="text-sm text-slate-900 dark:text-slate-100 leading-relaxed">
               <RichMathText
@@ -535,9 +540,7 @@ export const PartContentView: React.FC<PartContentViewProps> = ({
                 <Eye className="h-3.5 w-3.5" />
               )}
               <span>
-                {showAnswerKey
-                  ? 'Sembunyikan Skema Jawapan'
-                  : '--- SKEMA JAWAPAN (JANGAN INTAI DAHULU) ---'}
+                {showAnswerKey ? 'Tutup Jawapan' : 'Lihat Jawapan'}
               </span>
             </button>
 
@@ -545,7 +548,7 @@ export const PartContentView: React.FC<PartContentViewProps> = ({
               <div className="mt-3 rounded-lg border border-emerald-200 dark:border-emerald-800/70 bg-emerald-50/45 dark:bg-emerald-950/35 p-4 space-y-3 text-xs sm:text-sm text-slate-800 dark:text-slate-200">
                 <div>
                   <p className="font-mono font-semibold text-emerald-900 dark:text-emerald-300">
-                    Jawapan Ingatan 3-Saat:
+                    Jawapan Soalan Pantas:
                   </p>
                   <ol className="mt-1 space-y-1 list-decimal list-inside">
                     {subtopic.part6Checkpoint.quickRecall.map((q, idx) => (
@@ -557,7 +560,7 @@ export const PartContentView: React.FC<PartContentViewProps> = ({
                 </div>
                 <div className="pt-2 border-t border-emerald-200/80 dark:border-emerald-800/60">
                   <p className="font-mono font-semibold text-emerald-900 dark:text-emerald-300">
-                    Penyelesaian Masalah Pudar:
+                    Langkah Penyelesaian:
                   </p>
                   <p className="mt-0.5">
                     <RichMathText
@@ -567,7 +570,7 @@ export const PartContentView: React.FC<PartContentViewProps> = ({
                 </div>
                 <div className="pt-2 border-t border-emerald-200/80 dark:border-emerald-800/60">
                   <p className="font-mono font-semibold text-emerald-900 dark:text-emerald-300">
-                    Jawapan Pemindahan KBAT:
+                    Jawapan Soalan KBAT:
                   </p>
                   <p className="mt-0.5">
                     <RichMathText
@@ -581,10 +584,10 @@ export const PartContentView: React.FC<PartContentViewProps> = ({
         </section>
       )}
 
-      {/* Inline Likert for THIS Part */}
+      {/* Inline rating for THIS Part */}
       <LikertRatingBar
         testId={`likert-part-${subtopic.id}-${partNum}`}
-        label={`Penilaian Kendiri · Bahagian ${partNum}`}
+        label={`Tahap Kefahaman · Bahagian ${partNum}`}
         opened={partOpened}
         rating={partRating}
         onRate={onRatePart}
@@ -609,7 +612,7 @@ export const PartContentView: React.FC<PartContentViewProps> = ({
             onClick={onBackToSubtopic}
             className="rounded-md border border-slate-300 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 px-3.5 py-2 text-xs font-semibold text-slate-800 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer"
           >
-            Menu Subtopik {subtopic.code}
+            Senarai Bahagian ({subtopic.code})
           </button>
         </div>
 
@@ -628,7 +631,7 @@ export const PartContentView: React.FC<PartContentViewProps> = ({
             onClick={onBackToSubtopic}
             className="inline-flex items-center gap-1.5 rounded-md bg-emerald-600 px-4 py-2 text-xs font-semibold text-white hover:bg-emerald-700 dark:bg-emerald-600 dark:hover:bg-emerald-500 cursor-pointer"
           >
-            <span>Selesai Bahagian 6 · Kembali ke Subtopik</span>
+            <span>Selesai · Kembali ke Topik</span>
             <ArrowRight className="h-3.5 w-3.5" />
           </button>
         )}

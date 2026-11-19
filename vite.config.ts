@@ -14,6 +14,7 @@ export default defineConfig(() => {
         registerType: 'autoUpdate',
         includeAssets: [
           'icon.svg',
+          'jata-negara.svg',
           'apple-touch-icon.png',
           'pwa-192x192.png',
           'pwa-512x512.png',
@@ -21,10 +22,10 @@ export default defineConfig(() => {
         ],
         manifest: {
           id: '/',
-          name: 'Fizik KSSM Tingkatan 4 & 5',
-          short_name: 'Fizik KSSM',
+          name: 'Fizik & Kimia KSSM Tingkatan 4 & 5',
+          short_name: 'KSSM Sains',
           description:
-            'Nota kognitif, kata kunci SPM verbatim, rajah interaktif, dan latihan aktif Fizik KSSM Tingkatan 4 & 5 sedia luar talian.',
+            'Nota ringkas, kata kunci SPM, rajah interaktif, dan latihan Fizik & Kimia KSSM Tingkatan 4 & 5 sedia luar talian.',
           theme_color: '#0f172a',
           background_color: '#020617',
           display: 'standalone',
@@ -54,7 +55,7 @@ export default defineConfig(() => {
         workbox: {
           globPatterns: ['**/*.{js,css,html,ico,png,svg,woff,woff2,ttf}'],
           globIgnores: ['**/assets/aistudio/**'],
-          maximumFileSizeToCacheInBytes: 6 * 1024 * 1024,
+          maximumFileSizeToCacheInBytes: 16 * 1024 * 1024,
           cleanupOutdatedCaches: true,
           clientsClaim: true,
           skipWaiting: true,

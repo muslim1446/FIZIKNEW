@@ -19,7 +19,7 @@ const LIKERT_VALUES: LikertRating[] = [1, 2, 3, 4, 5];
 
 export const LikertRatingBar: React.FC<LikertRatingBarProps> = ({
   testId,
-  label = 'Penilaian Kendiri Skala Likert (1–5)',
+  label = 'Tahap Kefahaman (1–5)',
   opened,
   rating,
   onRate,
@@ -41,7 +41,7 @@ export const LikertRatingBar: React.FC<LikertRatingBarProps> = ({
           <p className="text-xs text-slate-600 dark:text-slate-400 mt-0.5">
             {rating
               ? LIKERT_LABELS[rating].recommendation
-              : 'Nilai kefahaman anda secara jujur, atau tandakan 0 jika hanya melawat.'}
+              : 'Pilih tahap kefahaman anda secara jujur, atau tekan 0 jika hanya melawat.'}
           </p>
         </div>
         <div
@@ -109,7 +109,7 @@ export const LikertRatingBar: React.FC<LikertRatingBarProps> = ({
             onClick={onJustVisiting}
             className="rounded-md border border-slate-200 dark:border-slate-700 bg-white dark:bg-slate-800 px-3 py-1.5 font-mono text-[11px] font-medium text-slate-600 dark:text-slate-300 hover:border-slate-300 dark:hover:border-slate-600 hover:bg-slate-100 dark:hover:bg-slate-700 cursor-pointer"
           >
-            0 · Sekadar melawat / belum baca betul-betul (Kira Belum Dibaca)
+            0 · Hanya melawat / belum baca (Kira Belum Dibaca)
           </button>
         </div>
       )}

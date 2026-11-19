@@ -1,21 +1,36 @@
 import React, { useState } from 'react';
-import { TEXTBOOK_CHAPTERS } from '../data';
+import { getChaptersBySubject } from '../data';
+import type { SubjectId } from '../types/textbook';
 import { KaTeXBlock, RichMathText } from './MathText';
 
 interface FormulaVaultViewProps {
+  activeSubject: SubjectId;
+  onChangeSubject: (subject: SubjectId) => void;
   onJumpToSubtopic: (chapterId: string, subtopicId: string) => void;
 }
 
 type FormFilter = 'all' | 4 | 5;
 
 export const FormulaVaultView: React.FC<FormulaVaultViewProps> = ({
+  activeSubject,
+  onChangeSubject,
   onJumpToSubtopic,
 }) => {
   const [formFilter, setFormFilter] = useState<FormFilter>('all');
 
-  const visibleChapters = TEXTBOOK_CHAPTERS.filter(
+  const subjectChapters = getChaptersBySubject(activeSubject);
+  const visibleChapters = subjectChapters.filter(
     (ch) => formFilter === 'all' || ch.formLevel === formFilter
   );
+
+  const subjectTitle =
+    activeSubject === 'kimia'
+      ? 'Senarai Rumus & Persamaan Kimia KSSM (Tingkatan 4 & 5)'
+      : 'Senarai Rumus Fizik KSSM (Tingkatan 4 & 5)';
+  const subjectDescription =
+    activeSubject === 'kimia'
+      ? 'Himpunan persamaan kimia, formula pengiraan, termokimia dan syarat tindak balas untuk 13 Bab.'
+      : 'Himpunan rumus penting untuk 13 Bab Tingkatan 4 dan 5 berserta syarat penggunaannya.';
 
   return (
     <div className="space-y-6">
@@ -23,34 +38,63 @@ export const FormulaVaultView: React.FC<FormulaVaultViewProps> = ({
         <div className="flex flex-wrap items-start justify-between gap-3">
           <div>
             <h2 className="font-display text-lg font-bold text-slate-950 dark:text-slate-50">
-              Senarai Rumus &amp; Pemalar Fizik KSSM (Tingkatan 4 &amp; 5)
+              {subjectTitle}
             </h2>
             <p className="mt-1 text-xs text-slate-600 dark:text-slate-400">
-              Himpunan rumus rasmi 13 Bab (Tingkatan 4 Bab 1–6 &amp; Tingkatan 5 Bab 1–7) berserta syarat sah dan sempadan kegagalan.
+              {subjectDescription}
             </p>
           </div>
-          <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label="Penapis tingkatan rumus">
-            {(
-              [
-                ['all', 'Semua (13 Bab)'],
-                [4, 'Tingkatan 4'],
-                [5, 'Tingkatan 5'],
-              ] as const
-            ).map(([key, label]) => (
-              <button
-                key={String(key)}
-                type="button"
-                data-testid={`formula-filter-${key}`}
-                onClick={() => setFormFilter(key)}
-                className={`rounded-md border px-2.5 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
-                  formFilter === key
-                    ? 'border-sky-700 bg-sky-700 text-white dark:border-sky-500 dark:bg-sky-600'
-                    : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700'
-                }`}
-              >
-                {label}
-              </button>
-            ))}
+
+          <div className="flex flex-wrap items-center gap-2">
+            <div className="flex items-center gap-1 rounded-md border border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 p-0.5" role="group" aria-label="Pilih subjek rumus">
+              {(
+                [
+                  ['fizik', 'Fizik KSSM'],
+                  ['kimia', 'Kimia KSSM'],
+                ] as const
+              ).map(([subj, label]) => (
+                <button
+                  key={subj}
+                  type="button"
+                  data-testid={`formula-subject-${subj}`}
+                  onClick={() => {
+                    setFormFilter('all');
+                    onChangeSubject(subj);
+                  }}
+                  className={`rounded px-2.5 py-1 text-xs font-semibold transition-colors cursor-pointer ${
+                    activeSubject === subj
+                      ? 'bg-slate-900 dark:bg-sky-600 text-white'
+                      : 'text-slate-600 dark:text-slate-300 hover:text-slate-950 dark:hover:text-white'
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
+
+            <div className="flex flex-wrap items-center gap-1.5" role="group" aria-label="Penapis tingkatan rumus">
+              {(
+                [
+                  ['all', `Semua (${subjectChapters.length} Bab)`],
+                  [4, 'Tingkatan 4'],
+                  [5, 'Tingkatan 5'],
+                ] as const
+              ).map(([key, label]) => (
+                <button
+                  key={String(key)}
+                  type="button"
+                  data-testid={`formula-filter-${key}`}
+                  onClick={() => setFormFilter(key)}
+                  className={`rounded-md border px-2.5 py-1.5 text-xs font-semibold transition-colors cursor-pointer ${
+                    formFilter === key
+                      ? 'border-sky-700 bg-sky-700 text-white dark:border-sky-500 dark:bg-sky-600'
+                      : 'border-slate-200 dark:border-slate-700 bg-slate-50 dark:bg-slate-800 text-slate-700 dark:text-slate-200 hover:bg-slate-100 dark:hover:bg-slate-700'
+                  }`}
+                >
+                  {label}
+                </button>
+              ))}
+            </div>
           </div>
         </div>
       </div>
@@ -76,7 +120,7 @@ export const FormulaVaultView: React.FC<FormulaVaultViewProps> = ({
                   <div className="min-w-0">
                     <div className="flex items-center justify-between gap-2">
                       <span className="font-mono text-xs font-semibold text-sky-700 dark:text-sky-400">
-                        T{chapter.formLevel} · Subtopik {sub.code}
+                        T{chapter.formLevel} · Topik {sub.code}
                       </span>
                       <button
                         type="button"
@@ -94,7 +138,7 @@ export const FormulaVaultView: React.FC<FormulaVaultViewProps> = ({
                     </div>
                   </div>
                   <p className="text-xs text-slate-600 dark:text-slate-300">
-                    <strong className="text-red-700 dark:text-red-400">Awas:</strong>{' '}
+                    <strong className="text-red-700 dark:text-red-400">Perhatian:</strong>{' '}
                     <RichMathText text={f.failsWhen} />
                   </p>
                 </div>

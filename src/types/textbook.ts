@@ -1,3 +1,5 @@
+export type SubjectId = 'fizik' | 'kimia';
+
 export type DiagramKind =
   | 'graph-shapes'
   | 'pendulum-setup'
@@ -36,7 +38,24 @@ export type DiagramKind =
   | 'f5-transformer'
   | 'f5-rectifier-transistor'
   | 'f5-nuclear-decay'
-  | 'f5-photoelectric-einstein';
+  | 'f5-photoelectric-einstein'
+  | 'chem-heating-cooling-curve'
+  | 'chem-atomic-shells'
+  | 'chem-mole-bridge'
+  | 'chem-periodic-trends'
+  | 'chem-ionic-covalent-bonds'
+  | 'chem-ph-titration'
+  | 'chem-qualitative-analysis'
+  | 'chem-collision-energy'
+  | 'chem-alloy-lattice'
+  | 'chem-redox-u-tube'
+  | 'chem-daniell-cell'
+  | 'chem-electrolysis-cell'
+  | 'chem-rusting-cell'
+  | 'chem-homolog-flowchart'
+  | 'chem-thermochemistry-levels'
+  | 'chem-latex-coagulation'
+  | 'chem-soap-micelle';
 
 export interface VerbatimSegment {
   text: string;
@@ -160,6 +179,7 @@ export interface SubtopicContent {
 
 export interface ChapterContent {
   id: string;
+  subject?: SubjectId;
   formLevel: 4 | 5;
   number: number;
   title: string;
@@ -190,9 +210,9 @@ export interface SubtopicProgress {
 export type StudyProgressMap = Record<string, SubtopicProgress>;
 
 export type AppRoute =
-  | { view: 'dashboard' }
-  | { view: 'review' }
-  | { view: 'formulas' }
+  | { view: 'dashboard'; subject?: SubjectId }
+  | { view: 'review'; subject?: SubjectId }
+  | { view: 'formulas'; subject?: SubjectId }
   | { view: 'chapter'; chapterId: string }
   | { view: 'subtopic'; chapterId: string; subtopicId: string }
   | { view: 'part'; chapterId: string; subtopicId: string; partNum: PartNumber };
